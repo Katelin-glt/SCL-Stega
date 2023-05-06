@@ -22,7 +22,7 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
             if datatype == "train" and w_aug:
                 data = pd.read_csv(data_home+datatype+".csv")
                 data.dropna()
-                final_sentence,final_label = [],[]
+                final_sentence, final_label = [], []
                 for i,val in enumerate(data["label"]):
                     final_sentence.append(data["sentence"][i])
                     final_label.append(val)
@@ -31,12 +31,12 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
 
                 print("Tokenizing data")
                 tokenizer = AutoTokenizer.from_pretrained(tokenizer_type)
-                tokenized_sentence_original =tokenizer.batch_encode_plus(final_sentence).input_ids
-                tokenized_sentence_augmented =tokenizer.batch_encode_plus(augmented_sentence).input_ids
+                tokenized_sentence_original = tokenizer.batch_encode_plus(final_sentence).input_ids
+                tokenized_sentence_augmented = tokenizer.batch_encode_plus(augmented_sentence).input_ids
 
-                tokenized_combined_sentence = [list(i) for i in zip(tokenized_sentence_original,tokenized_sentence_augmented)]
-                combined_sentence = [list(i) for i in zip(final_sentence,augmented_sentence)]
-                combined_label = [list(i) for i in zip(final_label,final_label)]
+                tokenized_combined_sentence = [list(i) for i in zip(tokenized_sentence_original, tokenized_sentence_augmented)]
+                combined_sentence = [list(i) for i in zip(final_sentence, augmented_sentence)]
+                combined_label = [list(i) for i in zip(final_label, final_label)]
 
                 processed_data = {}
 
@@ -58,15 +58,13 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
 
                 print("Tokenizing data")
                 tokenizer = AutoTokenizer.from_pretrained(tokenizer_type)
-                tokenized_sentence_original =tokenizer.batch_encode_plus(final_sentence).input_ids
+                tokenized_sentence_original = tokenizer.batch_encode_plus(final_sentence).input_ids
 
                 processed_data = {}
-
                 processed_data["tokenized_sentence"] = tokenized_sentence_original
                 processed_data["label"] = final_label
                 processed_data["sentence"] = final_sentence
                 data_dict[datatype] = processed_data
-
 
             if w_aug:
                 with open("./preprocessed_data/"+corpus+"/"+stego_method+"/"+dataset+"_waug_preprocessed_bert.pkl", 'wb') as f:
@@ -81,17 +79,12 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Enter tokenizer type')
-    parser.add_argument('-corpus', default="Twitter",type=str,
-                   help='Enter dataset=')
-    parser.add_argument('-stego_method', default="HC",type=str,
-                   help='Enter dataset=')
-    parser.add_argument('-d', default="1bpw",type=str,
-                   help='Enter dataset=')
-    parser.add_argument('-t', default="bert-base-uncased",type=str,
-                   help='Enter tokenizer type')
+    parser.add_argument('-corpus', default="Twitter", type=str, help='Enter dataset=')
+    parser.add_argument('-stego_method', default="VLC", type=str, help='Enter dataset=')
+    parser.add_argument('-d', default="1bpw",type=str, help='Enter dataset=')
+    parser.add_argument('-t', default="bert-base-uncased", type=str, help='Enter tokenizer type')
     parser.add_argument('--aug', default=True, action='store_true')
 
     args = parser.parse_args()
-
 
     preprocess_data(args.corpus, args.stego_method, args.d, args.t, w_aug=args.aug)
