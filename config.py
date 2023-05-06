@@ -1,5 +1,5 @@
 corpus = "Twitter"
-stego_method = "HC"
+stego_method = "VLC"
 dataset = ["1bpw"]
 
 tuning_param = ["lambda_loss", "main_learning_rate", "batch_size", "nepoch", "temperature", "SEED", "dataset"]
