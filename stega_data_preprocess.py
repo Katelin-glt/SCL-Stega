@@ -15,7 +15,7 @@ from transformers import BertTokenizer,AutoTokenizer
 
 def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
         print("Extracting data")
-        data_home = "./data/Steganalysis/"+corpus+"/"+stego_method+"/"+dataset+"/"
+        data_home = "./data/Steganalysis/" + corpus + "/" + stego_method + "/" + dataset + "/"
 
         data_dict = {}
         for datatype in ["train", "dev", "test"]:
@@ -23,7 +23,7 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
                 data = pd.read_csv(data_home+datatype+".csv")
                 data.dropna()
                 final_sentence, final_label = [], []
-                for i,val in enumerate(data["label"]):
+                for i, val in enumerate(data["label"]):
                     final_sentence.append(data["sentence"][i])
                     final_label.append(val)
 
@@ -50,9 +50,8 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
             else:
                 data = pd.read_csv(data_home+datatype+".csv", header=0)
                 data.dropna()
-                final_sentence,final_label = [],[]
-                for i,val in enumerate(data["label"]):
-
+                final_sentence, final_label = [], []
+                for i, val in enumerate(data["label"]):
                     final_sentence.append(data["sentence"][i])
                     final_label.append(val)
 
@@ -67,11 +66,11 @@ def preprocess_data(corpus, stego_method, dataset,tokenizer_type,w_aug=True):
                 data_dict[datatype] = processed_data
 
             if w_aug:
-                with open("./preprocessed_data/"+corpus+"/"+stego_method+"/"+dataset+"_waug_preprocessed_bert.pkl", 'wb') as f:
+                with open("./preprocessed_data/" + corpus + "/" + stego_method + "/" + dataset + "_waug_preprocessed_bert.pkl", 'wb') as f:
                     pickle.dump(data_dict, f)
                 f.close()
             else:
-                with open("./preprocessed_data/"+corpus+"/"+stego_method+"/"+dataset+"_preprocessed_bert.pkl", 'wb') as f:
+                with open("./preprocessed_data/" + corpus + "/" + stego_method + "/" + dataset + "_preprocessed_bert.pkl", 'wb') as f:
                     pickle.dump(data_dict, f)
                 f.close()
 
@@ -80,8 +79,8 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Enter tokenizer type')
     parser.add_argument('-corpus', default="Twitter", type=str, help='Enter dataset=')
-    parser.add_argument('-stego_method', default="VLC", type=str, help='Enter dataset=')
-    parser.add_argument('-d', default="1bpw",type=str, help='Enter dataset=')
+    parser.add_argument('-stego_method', default="AC", type=str, help='Enter dataset=')
+    parser.add_argument('-d', default="sub_1bpw", type=str, help='Enter dataset=')
     parser.add_argument('-t', default="bert-base-uncased", type=str, help='Enter tokenizer type')
     parser.add_argument('--aug', default=True, action='store_true')
 

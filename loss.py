@@ -15,7 +15,7 @@ class SupConLoss(nn.Module):
                   if features.is_cuda
                   else torch.device('cpu'))
 
-        batch_size = features.shape[0]  ## 2*N
+        batch_size = features.shape[0]  # 2*N
 
         if labels is not None and mask is not None:
             raise ValueError('Cannot define both `labels` and `mask`')
@@ -31,7 +31,7 @@ class SupConLoss(nn.Module):
 
         contrast_feature = features
         anchor_feature = contrast_feature
-        anchor_count = 2 ## we have two views
+        anchor_count = 2  # we have two views
 
         # compute logits
         anchor_dot_contrast = torch.div(
@@ -40,14 +40,14 @@ class SupConLoss(nn.Module):
 
         logits_mask = torch.scatter(torch.ones_like(mask), 1, torch.arange(batch_size).view(-1, 1).to(device), 0)
 
-        ## it produces 1 for the non-matching places and 0 for matching places i.e its opposite of mask
+        # it produces 1 for the non-matching places and 0 for matching places i.e its opposite of mask
         mask = mask * logits_mask
         # compute log_prob with logsumexp
         logits_max, _ = torch.max(anchor_dot_contrast, dim=1, keepdim=True)
         logits = anchor_dot_contrast - logits_max.detach()
         exp_logits = torch.exp(logits) * logits_mask
 
-        ## log_prob = x - max(x1,..,xn) - logsumexp(x1,..,xn) the equation
+        # log_prob = x - max(x1,..,xn) - logsumexp(x1,..,xn) the equation
         log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
 
         # compute mean of log-likelihood over positive

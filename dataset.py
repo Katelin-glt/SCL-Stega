@@ -42,7 +42,7 @@ class Stega_dataset(Dataset):
         return len(self.data["label"])
 
 
-def get_dataloader(batch_size, corpus, stego_method, dataset, seed=None, w_aug=True, label_list=None):
+def get_dataloader(batch_size, corpus, stego_method, dataset, seed=None, w_aug=True):
 
     if w_aug:
         with open('./preprocessed_data/'+corpus+"/"+stego_method+"/"+dataset+'_waug_preprocessed_bert.pkl', "rb") as f:

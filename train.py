@@ -39,10 +39,16 @@ def train(epoch, train_loader, model_main, loss_function, optimizer, lr_schedule
     steps = 0
     start_train_time = time.time()
 
-    if log.param.loss_type == "scl":
+    # if log.param.loss_type == "scl":
+    #     train_batch_size = log.param.batch_size * 2
+    # else:
+    #     train_batch_size = log.param.batch_size
+
+    if log.param.is_waug is True:
         train_batch_size = log.param.batch_size * 2
     else:
         train_batch_size = log.param.batch_size
+
     for idx, batch in enumerate(train_loader):
         if "bpw" in log.param.dataset:
             text_name = "sentence"
@@ -54,7 +60,7 @@ def train(epoch, train_loader, model_main, loss_function, optimizer, lr_schedule
         label = torch.tensor(label)
         label = torch.autograd.Variable(label).long()
 
-        if (label.size()[0] is not train_batch_size):# Last batch may have length different than log.param.batch_size
+        if (label.size()[0] is not train_batch_size): # Last batch may have length different than log.param.batch_size
             continue
 
         if torch.cuda.is_available():
@@ -252,6 +258,8 @@ if __name__ == '__main__':
         elif "bpw" in log.param.dataset:
             log.param.label_size = 2
 
+        # for dataset in ['1bpw', '2bpw', '3bpw', '4bpw', '5bpw']:
+        # log.param.dataset = dataset
         run_start = datetime.now()
         stega_train(log)
         run_end = datetime.now()
