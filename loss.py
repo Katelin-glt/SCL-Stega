@@ -1,21 +1,15 @@
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from pprint import pprint
-
 
 class SupConLoss(nn.Module):
 
-    def __init__(self, temperature=0.07):
+    def __init__(self, temperature=0.5):
         super(SupConLoss, self).__init__()
         self.temperature = temperature
 
     def forward(self, features, labels=None, mask=None):
-        device = (torch.device('cuda')
-                  if features.is_cuda
-                  else torch.device('cpu'))
-
-        batch_size = features.shape[0]  # 2*N
+        device = (torch.device('cuda') if features.is_cuda else torch.device('cpu'))
+        batch_size = features.shape[0]
 
         if labels is not None and mask is not None:
             raise ValueError('Cannot define both `labels` and `mask`')
@@ -31,7 +25,7 @@ class SupConLoss(nn.Module):
 
         contrast_feature = features
         anchor_feature = contrast_feature
-        anchor_count = 2  # we have two views
+        anchor_count = 2  # two views if is_waug is True, one view if is_waug is False
 
         # compute logits
         anchor_dot_contrast = torch.div(
@@ -50,8 +44,10 @@ class SupConLoss(nn.Module):
         # log_prob = x - max(x1,..,xn) - logsumexp(x1,..,xn) the equation
         log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
 
+        mask_sum = mask.sum(dim=1)
+        mask_sum = torch.where(mask_sum == 0, torch.ones_like(mask_sum), mask_sum)
         # compute mean of log-likelihood over positive
-        mean_log_prob_pos = (mask * log_prob).sum(1) / mask.sum(1)
+        mean_log_prob_pos = (mask * log_prob).sum(1) / mask_sum.detach()
         # loss
         loss = -1 * mean_log_prob_pos
         loss = loss.mean()

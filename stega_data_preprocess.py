@@ -79,8 +79,8 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Enter tokenizer type')
     parser.add_argument('-corpus', default="Twitter", type=str, help='Enter dataset=')
-    parser.add_argument('-stego_method', default="AC", type=str, help='Enter dataset=')
-    parser.add_argument('-d', default="sub_1bpw", type=str, help='Enter dataset=')
+    parser.add_argument('-stego_method', default="VLC", type=str, help='Enter dataset=')
+    parser.add_argument('-d', default="1bpw", type=str, help='Enter dataset=')
     parser.add_argument('-t', default="bert-base-uncased", type=str, help='Enter tokenizer type')
     parser.add_argument('--aug', default=True, action='store_true')
 

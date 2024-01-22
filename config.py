@@ -1,5 +1,5 @@
 corpus = "Twitter"
-stego_method = "AC"
+stego_method = "VLC"
 dataset = ["1bpw"]
 
 tuning_param = ["lambda_loss", "main_learning_rate", "batch_size", "nepoch", "temperature", "SEED", "dataset"]
@@ -12,7 +12,7 @@ main_learning_rate = [2e-05]
 hidden_size = 768
 nepoch = [10]
 
-loss_type = "ce"  # ['ce', 'scl']
+loss_type = "scl"  # ['ce', 'scl']
 model_type = "electra"  # ['electra', 'bert']
 
 is_waug = True
